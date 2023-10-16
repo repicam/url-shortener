@@ -3,7 +3,8 @@ import { model, Schema } from "mongoose"
 const urlSchema = new Schema( {
   original: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   shortId: {
     type: String,
@@ -18,6 +19,6 @@ const urlSchema = new Schema( {
   versionKey: false
 } )
 
-const url = model( 'Url', urlSchema )
+const Url = model( 'Url', urlSchema )
 
-export default url
+export default Url
