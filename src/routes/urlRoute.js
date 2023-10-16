@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { getUrl, saveUrl } from '../controllers/urlController.js'
+import { getUrl, getUrlStatistics, saveUrl } from '../controllers/urlController.js'
 import { fetchTest } from '../validators/urlValidator.js'
 
 const router = Router()
@@ -27,7 +27,7 @@ router.post( '/', fetchTest, async ( req, res ) => {
 router.get( '/:short/statistics', async ( req, res ) => {
   const { short } = req.params
   try {
-    const urlInfo = await getUrl( short )
+    const urlInfo = await getUrlStatistics( short )
     res.send( urlInfo )
   } catch ( error ) {
     res.status( 404 ).send( { 'error': error } )

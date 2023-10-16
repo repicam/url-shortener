@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-import { findByUrl, saveUrl } from '../repositories/urlRepository.js'
+import { findByShortId, findByUrl, saveUrl, updateClicksUrl } from '../repositories/urlRepository.js'
 
 export const checkUrlAndSave = async ( newUrl ) => {
   const urlExists = await findByUrl( newUrl )
@@ -14,4 +14,21 @@ export const checkUrlAndSave = async ( newUrl ) => {
 
   const { original, shortId } = await saveUrl( urlToSave )
   return { original, shortId }
+}
+
+export const getUrlByShortId = async ( shortId ) => {
+  const url = await findByShortId( shortId )
+
+  if ( url.length === 0 )
+    throw new Error( 'Short url not found' )
+
+  url.clicks = url.clicks + 1
+  await updateClicksUrl( url )
+
+  return `http://${ url.original }`
+}
+
+export const getStatisticsByShortId = async ( shortIdSearch ) => {
+  const { original, shortId, clicks } = await findByShortId( shortIdSearch )
+  return { original, shortId, clicks }
 }
