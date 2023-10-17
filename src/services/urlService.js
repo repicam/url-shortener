@@ -4,8 +4,8 @@ import { findByShortId, findByUrl, saveUrl, updateClicksUrl } from '../repositor
 export const checkUrlAndSave = async ( newUrl ) => {
   const urlExists = await findByUrl( newUrl )
 
-  if ( urlExists.length !== 0 ) {
-    const { original, shortId } = urlExists[ 0 ]
+  if ( urlExists ) {
+    const { original, shortId } = urlExists
     return { original, shortId }
   }
 
@@ -17,10 +17,7 @@ export const checkUrlAndSave = async ( newUrl ) => {
 }
 
 export const getUrlByShortId = async ( shortId ) => {
-  const url = await findByShortId( shortId )
-
-  if ( url.length === 0 )
-    throw new Error( 'Short url not found' )
+  const url = await findUrlExistsByShortId( shortId )
 
   url.clicks = url.clicks + 1
   await updateClicksUrl( url )
@@ -29,6 +26,15 @@ export const getUrlByShortId = async ( shortId ) => {
 }
 
 export const getStatisticsByShortId = async ( shortIdSearch ) => {
-  const { original, shortId, clicks } = await findByShortId( shortIdSearch )
+  const { original, shortId, clicks } = await findUrlExistsByShortId( shortIdSearch )
   return { original, shortId, clicks }
+}
+
+const findUrlExistsByShortId = async ( shortId ) => {
+  const url = await findByShortId( shortId )
+
+  if ( !url )
+    throw new Error( 'Short url not found' )
+
+  return url
 }

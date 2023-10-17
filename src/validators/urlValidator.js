@@ -1,9 +1,12 @@
 const sanitizeUrl = ( url ) => {
   if ( url.startsWith( 'https' ) )
-    return url.replace( 'https://', '' )
+    url = url.replace( 'https://', '' )
   
   if ( url.startsWith( 'http' ) )
-    return url.replace( 'http://', '' )
+    url = url.replace( 'http://', '' )
+
+  if ( url.endsWith( '/' ) )
+    url = url.slice( 0, -1 )
 
   return url
 }
@@ -17,10 +20,10 @@ export const fetchTest = ( req, res, next ) => {
         req.urlSanitized = url
         next()
       } else {
-        res.status( 404 ).send( { "error": "URL not exist" } )
+        res.status( 404 ).send( { "error": "URL doesn't respond" } )
       }
     } )
     .catch( error => {
-      res.status( 404 ).send( { "error": "URL not exist" } )
+      res.status( 404 ).send( { "error": `URL not exist: ${error.message}` } )
     } )
 }

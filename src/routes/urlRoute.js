@@ -10,7 +10,7 @@ router.get( '/:short', async ( req, res ) => {
     const url = await getUrl( short )
     res.redirect( url )
   } catch ( error ) {
-    res.status( 404 ).send( { 'error': error } )
+    res.status( 404 ).send( { 'error': error.message } )
   }
 } )
 
@@ -20,7 +20,7 @@ router.post( '/', fetchTest, async ( req, res ) => {
     const shortUrl = await saveUrl( urlSanitized )
     res.send( shortUrl )
   } catch ( error ) {
-    res.status( 404 ).send( { 'error': error } )
+    res.status( 404 ).send( { 'error': error.message } )
   }
 } )
 
@@ -30,7 +30,7 @@ router.get( '/:short/statistics', async ( req, res ) => {
     const urlInfo = await getUrlStatistics( short )
     res.send( urlInfo )
   } catch ( error ) {
-    res.status( 404 ).send( { 'error': error } )
+    res.status( 404 ).send( { 'error': error.message } )
   }
 } )
 
